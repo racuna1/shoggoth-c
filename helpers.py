@@ -42,7 +42,7 @@ def describe_error(error):
         return "Your program encountered an error. Exit code: " + str(error)
 
 
-def find_and_remove_file(file_name):
+def remove_file(file_name):
     if os.path.exists(file_name):
         os.remove(file_name)
         return True

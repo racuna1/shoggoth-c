@@ -11,6 +11,10 @@ import helpers
 
 from helpers import submission_dir, source_dir, results_dir
 
+__author__ = "Mitchell Buckner"
+__author__ = "Ruben Acuna"
+
+
 # Create the version of the file that tracks malloc and free
 def create_tracker_files(file_names):
     lines = [
@@ -122,7 +126,7 @@ def validate_libraries(files, allowed):
 # compiles the list of submission_files into a program named program_name
 def compile_files(submission_files, program_name, allow_vla, c_version):
     vla_str = ""
-    if allow_vla:
+    if not allow_vla:
         vla_str = "-Werror=vla "
 
     # compile each c file into an o file
@@ -189,10 +193,7 @@ if __name__ == '__main__':
 
     for method in data["suite"]:
         # remove the malloc log before running each method
-        try:
-            os.remove("malloc_log.csv")
-        except:
-            pass
+        helpers.remove_file("malloc_log.csv")
 
         result = [[], [], []]
         for test in method["tests"]:
@@ -213,8 +214,5 @@ if __name__ == '__main__':
     build_json(results)
 
     # remove this at the end just in case
-    try:
-        os.remove("malloc_log.csv")
-    except:
-        pass
+    helpers.remove_file("malloc_log.csv")
 

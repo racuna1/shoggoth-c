@@ -1,3 +1,6 @@
+__author__ = "Mitchell Buckner"
+__author__ = "Ruben Acuna"
+
 import subprocess
 import time
 
@@ -25,7 +28,10 @@ class ConsoleProgramRunner:
     def push_runtime_cmd(self, command):
         self.runtime_commands.append(command)
 
-    def push_program_arg(self, args):
+    def push_program_arg(self, arg):
+        self.args.append(arg)
+
+    def push_program_args(self, args):
         self.args += args
 
     def run(self) -> dict:
