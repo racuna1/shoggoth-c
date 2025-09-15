@@ -1,43 +1,48 @@
 import os
 import subprocess
 import time
+import traceback
 
 import pandas as pd
 
 import timeout_decorator
 
+# Get the current directory of the Python script (source directory)
 source_dir = os.path.dirname(os.path.abspath(__file__))
+# Go up one level to the parent directory of the source directory
 parent_dir = os.path.dirname(source_dir)
+
 submission_dir = os.path.join(parent_dir, "submission") # os.path.join(source_dir, 'source_code')#
 results_dir = os.path.join(parent_dir, "results")  # os.path.join(source_dir, 'source_code')#
 
-logger_exec_path =  submission_dir + '/StudentProgramLogger'
-main_exec_path =    submission_dir + '/StudentProgramBase'
+logger_file_path = submission_dir + '/StudentProgramLogger'
+main_file_path = submission_dir + '/StudentProgramBase'
+# if adding a file version, make sure to update it here
+FILE_VERSIONS = ['base', 'logger']
 
-
-def call_or_timeout(function):
+def call_or_timeout(function, count=3, file_version='logger'):
+    # if file version is invalid
+    if file_version not in FILE_VERSIONS:
+        file_version = 'base'
     try:
-        return function()
+        return function(file_version)
     except timeout_decorator.TimeoutError:
-        return [False, False, False], ["Function took too long and was timed out.", "Function took too long and was timed out.", "Function took too long and was timed out."]
+        return [False] * count, ["Function took too long and was timed out."] * count
     except TimeoutError:
-        return [False, False, False], ["Function took too long and was timed out.",
-                                       "Function took too long and was timed out.",
-                                       "Function took too long and was timed out."]
+        return [False] * count, ["Function took too long and was timed out."] * count
     except Exception as e:
-        return [False, False, False], [f"Uncaught Exception in autograder: {e}",
-                                       f"Uncaught Exception in autograder: {e}",
-                                       f"Uncaught Exception in autograder: {e}"]
+        traceback.print_exc()
+        return [False] * count, [f"Uncaught Exception in autograder: {e}"] * count
 
 
 def describe_error(error):
     if error == -11:
-        return "Your program encountered a segmentation fault."
+        return f"Your program encountered a segmentation fault. Exit code: " + str(error)
     else:
         return "Your program encountered an error. Exit code: " + str(error)
 
 
-def find_and_remove_file(file_name):
+def remove_file(file_name):
     if os.path.exists(file_name):
         os.remove(file_name)
         return True
@@ -57,6 +62,15 @@ def find_and_remove_file(file_name):
 # dataframe
 #
 def test_mallocs():
+    """
+    Parses the malloc log file and returns stats about it, plus a dataframe with its full contents
+    :return:
+    num mallocs
+    num frees
+    [mallocs without frees]
+    [frees without mallocs]
+    dataframe
+    """
     column_names = ['Type', 'Address', 'Size', 'Line', 'File']
     try:
         df = pd.read_csv("malloc_log.csv", header=None, names=column_names)
@@ -73,8 +87,10 @@ def test_mallocs():
     return mallocs.shape[0], frees.shape[0], mallocs_without_frees, frees_without_mallocs, df
 
 
+# this has been replaced by util_console_testing
+"""
 def execute_program(program_args, runtime_input, file_path=main_exec_path):
-    """
+    
     :param program_args: arguments to execute the program with, should be an array of strings.
         Each one is an argument piece. ex: ['-i', 'fileName.bmp']
     :param runtime_input: array of strings representing inputs to write to the stdin during program execution.
@@ -83,12 +99,10 @@ def execute_program(program_args, runtime_input, file_path=main_exec_path):
     :return: program stdout output and error status
 
     Sample Usage: output, return_code = helpers.execute_program(['-i' 'fileName.bmp'], [], file_path=helpers.main_exec_path)
-    """
 
-    print(program_args)
+    NOTE: All file pathing is based upon the root directory of the python program, not the submissions folder where the code is!
+
     command = [file_path] + program_args
-
-    print(command)
 
     process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
     start_time = time.time()
@@ -107,7 +121,8 @@ def execute_program(program_args, runtime_input, file_path=main_exec_path):
             # This exception occurs when the process has already terminated and no longer accepts input.
             break
 
-    output = process.stdout.read()
+    stdout, stderr = process.communicate()
     process.wait()
 
-    return output, process.returncode
+    return stdout, process.returncode
+"""

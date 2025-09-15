@@ -35,8 +35,15 @@
 #     }
 #------------------------------------------------------------------------------
 import json
+import os
 import sys
 import re
+
+import pycparser
+
+import check_complexity
+import helpers
+import struct_size_finder
 
 # This is not required if you've installed pycparser into
 # your site-packages/ with setup.py
@@ -48,6 +55,8 @@ from pycparser.plyparser import Coord
 
 RE_CHILD_ARRAY = re.compile(r'(.*)\[(.*)\]')
 RE_INTERNAL_ATTR = re.compile('__.*__')
+# TODO: This should not be hardcoded
+FAKE_HEADERS_PATH = "/home/mitch/PycharmProjects/shoggoth-c/.venv/lib/python3.11/site-packages/pycparser_fake_libc"
 
 
 class CJsonError(Exception):
@@ -126,7 +135,11 @@ def to_json(node, **kwargs):
 
 def file_to_dict(filename):
     """ Load C file into dict representation of ast """
-    ast = parse_file(filename, use_cpp=True)
+    ast = parse_file(
+        filename,
+        use_cpp=True,
+        cpp_args=['-I', FAKE_HEADERS_PATH]  # Use fake headers
+    )
     return to_dict(ast)
 
 
@@ -183,22 +196,14 @@ def from_dict(node_dict):
     return klass(**objs)
 
 
-def from_json(ast_json):
-    """ Build an ast from json string representation """
-    return from_dict(json.loads(ast_json))
+# function that uses the generated AST and runs the complexity check on it
+def get_function_complexity(func_name, file_name) -> int:
+    ast_dict = file_to_dict(file_name)
+    ast = from_dict(ast_dict)
+    return check_complexity.complexity_check(ast, func_name)
 
+def find_structs(file_name) -> dict:
+    ast_dict = file_to_dict(file_name)
+    ast = from_dict(ast_dict)
 
-#------------------------------------------------------------------------------
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        # Some test code...
-        # Do trip from C -> ast -> dict -> ast -> json, then print.
-        ast_dict = file_to_dict(sys.argv[1])
-        ast = from_dict(ast_dict)
-
-
-        with open("ast_output.json", 'w') as file:
-            file.write(to_json(ast, sort_keys=True, indent=4))
-            file.close()
-    else:
-        print("Please provide a filename as argument")
+    return struct_size_finder.find_struct_sizes(ast)

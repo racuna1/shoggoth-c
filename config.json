@@ -1,13 +1,21 @@
 {
+  "module": "mX",
+  "uid": "cpX",
+  "project_location": "/autograder/submission/",
+  "file_versions": ["base", "logger"],
+  "c_version": "99",
+  "allow_vla": true,
   "suite": [
      {
       "module":"test_main_menu",
       "method":"test_credit_count",
+      "file_version": "base",
       "tests": [
         {
           "name": "Main Menu 1 [Hint: Displays Credits.]",
           "number": 1.1,
           "points": 1
+
         },
         {
           "name": "Main Menu 2 [Hint: Displays Correct Credit Count.]",
@@ -19,6 +27,7 @@
     {
       "module":"test_course_insert",
       "method":"test_course_insert_1",
+      "file_version": "logger",
       "tests": [
         {
           "name": "Insert Course 1 [Hint: Basic Behavior.]",
@@ -29,184 +38,6 @@
           "name": "Schedule Print [Hint: Basic Behavior.]",
           "number": 3.1,
           "points": 2
-        }
-      ]
-    },
-    {
-      "module":"test_course_insert",
-      "method":"test_course_insert_2",
-      "tests": [
-        {
-          "name": "Insert Course 2 [Hint: Inserts 2 Courses.]",
-          "number": 2.2,
-          "points": 1
-        },
-        {
-          "name": "Insert Course 3 [Hint: Correct Ordering.]",
-          "number": 2.3,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_course_insert",
-      "method":"test_course_insert_3",
-      "tests": [
-        {
-          "name": "Insert Course 4 [Hint: Inserts 3 Courses.]",
-          "number": 2.4,
-          "points": 1
-        },
-        {
-          "name": "Insert Course 5 [Hint: Correct Ordering.]",
-          "number": 2.5,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_course_insert",
-      "method":"test_course_insert_duplicate",
-      "tests": [
-        {
-          "name": "Insert Course 6 [Hint: Inserting a Duplicate Course.]",
-          "number": 2.6,
-          "points": 1
-        },
-        {
-          "name": "Insert Course 7 [Hint: Prints Error Message on Duplicate.]",
-          "number": 2.7,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_course_remove",
-      "method":"test_course_remove_1",
-      "tests": [
-        {
-          "name": "Remove Course 1 [Hint: Basic Behavior.]",
-          "number": 4.1,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_course_remove",
-      "method":"test_course_remove_2",
-      "tests": [
-        {
-          "name": "Remove Course 2 [Hint: Removing first course in a list of 2.]",
-          "number": 4.2,
-          "points": 1
-        }
-      ]
-
-    },
-    {
-      "module":"test_course_remove",
-      "method":"test_course_remove_3",
-      "tests": [
-        {
-          "name": "Remove Course 3 [Hint: Removing course from list of 3.]",
-          "number": 4.3,
-          "points": 1
-        },
-        {
-          "name": "Remove Course 4 [Hint: Maintaining list after removing course.]",
-          "number": 4.4,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_course_remove",
-      "method":"test_course_remove_missing",
-      "tests": [
-        {
-          "name": "Remove Course 5 [Hint: Removing a course not in the list.]",
-          "number": 4.5,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_file",
-      "method":"test_load_file",
-      "tests": [
-        {
-          "name": "Load File 1 [Hint: Basic Behavior.]",
-          "number": 5.1,
-          "points": 1
-        },
-        {
-          "name": "Load File 2 [Hint: Loads all courses in file.]",
-          "number": 5.2,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_file",
-      "method":"test_load_missing_file",
-      "tests": [
-        {
-          "name": "Load File 3 [Hint: No file exists.]",
-          "number": 5.3,
-          "points": 2
-        }
-      ]
-    },
-    {
-      "module":"test_file",
-      "method":"test_save_file",
-      "tests": [
-        {
-          "name": "Save File 1 [Hint: Saves a Course.]",
-          "number": 6.1,
-          "points": 2
-        },
-        {
-          "name": "Save File 2 [Hint: Correctly Saves all Courses.]",
-          "number": 6.2,
-          "points": 2
-        }
-      ]
-    },
-    {
-      "module":"test_memory_mgmt",
-      "method":"test_malloc_1",
-      "tests": [
-        {
-          "name": "Memory Allocation 1 [Hint: Uses Malloc when creating courses.]",
-          "number": 7.1,
-          "points": 2
-        },
-        {
-          "name": "Memory Allocation 2 [Hint: Frees all Memory on close.]",
-          "number": 7.2,
-          "points": 1
-        },
-        {
-          "name": "Memory Allocation 3 [Hint: Frees Correct Memory addresses on close.]",
-          "number": 7.3,
-          "points": 1
-        }
-      ]
-    },
-    {
-      "module":"test_memory_mgmt",
-      "method":"test_malloc_2",
-      "tests": [
-        {
-          "name": "Memory Allocation 4 [Hint: Frees Memory when removing courses.]",
-          "number": 7.4,
-          "points": 1
-        },
-        {
-          "name": "Memory Allocation 5 [Hint: Frees Correct Memory addresses when removing courses.]",
-          "number": 7.5,
-          "points": 1
         }
       ]
     }
@@ -223,5 +54,4 @@
   "required_headers": [
 
   ]
-
 }
