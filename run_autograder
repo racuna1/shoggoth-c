@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cd /autograder/source
+
+#start shoggoth-c
+python3 main.py
