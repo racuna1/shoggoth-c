@@ -3,6 +3,7 @@ A Gradescope compatible tool for performing automatic assessment of C homework, 
 
 ## Authors
 * Mitchell Buckner
+* Michael Deitch
 * Ruben Acuña
 
 

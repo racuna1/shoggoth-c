@@ -1,3 +1,5 @@
+__author__ = "Michael Deitch"
+
 # Think of this as an "interface" that needs to be implemented for whichever
 # unit-testing framework you are choosing for the automated assessment tool.
 #

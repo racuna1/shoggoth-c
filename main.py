@@ -14,6 +14,7 @@ from check_iface_tests import did_iface_tests_compile
 from helpers import submission_dir, source_dir, results_dir
 
 __author__ = "Mitchell Buckner"
+__author__ = "Michael Deitch"
 __author__ = "Ruben Acuna"
 
 
