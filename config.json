@@ -5,6 +5,7 @@
   "file_versions": ["base", "logger"],
   "c_version": "99",
   "allow_vla": true,
+  "interface_testing": false,
   "suite": [
      {
       "module":"test_main_menu",

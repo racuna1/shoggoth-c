@@ -6,8 +6,10 @@ import shutil
 import subprocess
 import os
 import sys
+import glob
 
 import helpers
+from check_iface_tests import did_iface_tests_compile
 
 from helpers import submission_dir, source_dir, results_dir
 
@@ -76,6 +78,44 @@ def build_json(test_results):
     with open(os.path.join(results_dir, 'results.json'), 'w') as file:
         json.dump(data, file, indent=4, sort_keys=True)
 
+def build_json_on_compilation_fail(test_results):
+    data = {
+        "output": "Project failed to build (failure to build with C unit tests). Make sure to follow the project outline.",
+        "stdout_visibility": "visible",
+        "tests": [],
+
+    }
+
+    submission_score = 0
+    # weights points relative to the default norm of 30
+    SUBMISSION_WEIGHT = 1
+
+    for result in test_results:
+        for i, piece in enumerate(result[0]):
+            print(result[1][i], result[0][i], result[3][i])
+
+            test = {
+                "max_score": (result[1][i] * SUBMISSION_WEIGHT),
+                "name": result[0][i],
+                # "number": result[2][i],
+                "output": result[3][i]
+            }
+
+            if result[2][i] is True:
+                submission_score += (result[1][i] * SUBMISSION_WEIGHT)
+                test["score"] = (result[1][i] * SUBMISSION_WEIGHT)
+            else:
+                test["score"] = 0
+
+            data["tests"].append(test)
+
+    data["tests"].sort(key=lambda x: x["name"])
+
+    with open(os.path.join(results_dir, 'results.json'), 'w') as file:
+        json.dump(data, file, indent=4, sort_keys=True)
+
+    with open(os.path.join(results_dir, 'results.json'), 'w') as file:
+        json.dump(data, file, indent=4, sort_keys=True)
 
 # builds the json file for when the autograder fails
 def build_json_on_fail(error):
@@ -211,7 +251,19 @@ if __name__ == '__main__':
 
         results.append(result)
 
-    build_json(results)
+        # Check to see that there was no compilation error with the unit tests (if unit testing was used)
+        unit_tests_present = data['interface_testing']
+
+        if unit_tests_present:
+            unit_tests_ran = did_iface_tests_compile()
+
+            if unit_tests_ran:
+                build_json(results)
+            else:
+                build_json_on_compilation_fail(results)
+
+        elif not unit_tests_present:
+            build_json(results)
 
     # remove this at the end just in case
     helpers.remove_file("malloc_log.csv")
