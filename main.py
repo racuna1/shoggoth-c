@@ -9,6 +9,7 @@ import sys
 import glob
 
 import helpers
+from check_iface_tests import did_iface_tests_compile
 
 from helpers import submission_dir, source_dir, results_dir
 
@@ -250,17 +251,19 @@ if __name__ == '__main__':
 
         results.append(result)
 
-        # Check to see that here was no compilation error with the unit test (UnitTests.c)
-        path_to_search = submission_dir.join('**/testing_results.xml')
-        found = False
+        # Check to see that there was no compilation error with the unit tests (if unit testing was used)
+        unit_tests_present = data['interface_testing']
 
-        for f in glob.glob(path_to_search, recursive=True):
-            found = True
+        if unit_tests_present:
+            unit_tests_ran = did_iface_tests_compile()
 
-        if found:
-            build_json(results)
-        else:
-            build_json_on_compilation_fail(results)
+            if unit_tests_ran:
+                build_json(results)
+            else:
+                build_json_on_compilation_fail(results)
+
+        elif not unit_tests_present:
+            build_json_on_fail(results)
 
     # remove this at the end just in case
     helpers.remove_file("malloc_log.csv")
