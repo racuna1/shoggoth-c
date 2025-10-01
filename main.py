@@ -263,7 +263,7 @@ if __name__ == '__main__':
                 build_json_on_compilation_fail(results)
 
         elif not unit_tests_present:
-            build_json_on_fail(results)
+            build_json(results)
 
     # remove this at the end just in case
     helpers.remove_file("malloc_log.csv")
