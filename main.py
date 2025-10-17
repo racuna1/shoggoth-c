@@ -36,6 +36,8 @@ def create_tracker_files(file_names):
             if "#include" in line:
                 last_include = i
 
+        last_include+=1
+
         content[last_include:last_include] = lines
 
         name, extension = file_name.split('.')
