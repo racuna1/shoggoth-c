@@ -6,7 +6,6 @@ import shutil
 import subprocess
 import os
 import sys
-import glob
 
 import helpers
 from check_iface_tests import did_iface_tests_compile
@@ -15,6 +14,7 @@ from helpers import submission_dir, source_dir, results_dir
 
 __author__ = "Mitchell Buckner"
 __author__ = "Michael Deitch"
+__author__ = "Kyle Burnett"
 __author__ = "Ruben Acuna"
 
 
@@ -122,7 +122,6 @@ def build_json_on_compilation_fail(test_results):
 
 # builds the json file for when the autograder fails
 def build_json_on_fail(error):
-
     if("variable length array" in error):
         error = "You have used variable length arrays in your code which have been disallowed for this assignment. Please allocate all variably sized memory in the heap.\n" + error
 
@@ -196,7 +195,7 @@ def compile_files(submission_files, program_name, allow_vla, c_version):
 # compiles the student submission
 # example is given
 def compile_submission(submission_files, allow_vla, c_version):
-
+    # compile base version
     compile_files(submission_files, "StudentProgramBase", allow_vla, c_version)
 
     # copy the mallocHooks files into the submission directory so that they can easily be found
